@@ -10,6 +10,11 @@ const signupBody=zod.object({
     lastName:zod.string(),
     password:zod.string()
 })
+
+const signinBody=zod.object({
+    username:zod.string.email(),
+    password:zod.string()
+})
 router.post('/signup',async (req,res)=>{
     try{
         const {success}=signupBody.safeParse(req.body);
@@ -47,4 +52,31 @@ router.post('/signup',async (req,res)=>{
     }
 
 })
+router.post('/signin',(req,res)=>{
+    try {
+        const {success}=signinBody.safeParse(req.body);
+        if(!success) {
+            res.sendStatus(411).json({
+                message:'Incorrect inputs'
+            })
+        } 
+        const user=User.findOne({username:req.body.username,password:req.body.password});
+        if(!user) {
+            res.sendStatus(411).json({
+                message:'Incorrect Credentials'
+            })
+        }
+        const userid=user._id;
+        const token=jwt.verify({userid},JWT_SECRET);
+        res.sendStatus(400).status({
+            message:"logged in successfully",
+            jwttoken:token
+        })
+    } catch(error) {
+        res.sendStatus(500).status({
+            message:"Internal server error"
+        })
+    }
+})
+
 module.exports=router;
