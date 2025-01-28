@@ -20,6 +20,8 @@ try{
 
 
 app.use("api/vi",rootRouter);
+
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
