@@ -16,8 +16,8 @@ const signupBody=zod.object({
 })
 
 const signinBody=zod.object({
-    username:zod.string().email(),
-    password:zod.string()
+    username:zod.string().email().min(4).max(30),
+    password:zod.string().min(6)
 })
 
 
@@ -60,7 +60,7 @@ router.post('/signup',async (req,res)=>{
 
 
 
-router.post('/signin',(req,res)=>{
+router.post('/signin',async(req,res)=>{
     try {
         const {success}=signinBody.safeParse(req.body);
         if(!success) {
@@ -69,7 +69,7 @@ router.post('/signin',(req,res)=>{
             })
             return;
         } 
-        const user=User.findOne({username:req.body.username,password:req.body.password});
+        const user=await User.findOne({username:req.body.username,password:req.body.password});
         if(!user) {
             res.status(411).json({
                 message:'Incorrect Credentials'
@@ -77,8 +77,8 @@ router.post('/signin',(req,res)=>{
             return;
         }
         const userid=user._id;
-        const token=jwt.verify({userid},JWT_SECRET);
-        res.status(400).json({
+        const token=jwt.sign({userid},JWT_SECRET);
+        res.status(200).json({
             message:"logged in successfully",
             jwttoken:token
         })
