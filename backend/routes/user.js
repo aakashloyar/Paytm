@@ -79,7 +79,7 @@ router.post('/signin',async(req,res)=>{
         const userid=user._id;
         const token=jwt.sign({userid},JWT_SECRET);
         res.status(200).json({
-            message:"logged in successfully",
+            message:"Logged in successfully",
             jwttoken:token
         })
     } catch(error) {
