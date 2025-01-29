@@ -19,7 +19,7 @@ try{
 
 
 
-app.use("api/vi",rootRouter);
+app.use("/api/v1",rootRouter);
 
 
 app.get('/', (req, res) => {
