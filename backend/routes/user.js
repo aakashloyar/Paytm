@@ -99,16 +99,13 @@ const updateBody=zod.object({
 
 router.put('/',authMiddleware,async(req,res)=>{
     const {success}=updateBody.safeParse(req.body);
-   // console.log(1);
     if(!success) {
         res.status(411).json({
             message:'Error while updating information'
         })
         return;
     } 
-    //console.log(2);
     try{
-        console.log(req.userId);
         await User.updateOne({ _id: req.userId }, req.body);
         res.status(200).json({
             message:'Information update successfully'
@@ -125,19 +122,30 @@ router.put('/',authMiddleware,async(req,res)=>{
 
 
 router.get('/bulk',async(req,res)=>{
-    const filter=req.query.filter||'';
-    const users=await User.find({
-        $or: [
-          { firstName: { $regex: new RegExp(filter, 'i') } },  // Dynamic filter in firstName
-          { lastName: { $regex: new RegExp(filter, 'i') } }    // Dynamic filter in lastName
-        ]
-    });
-    const x=users.map((user)=>{
-        return user;
-    })
-    res.json({
-        x
-    })  
+    try{
+        const filter=req.query.filter||'';
+        const users=await User.find({
+            $or: [
+            { firstName: { $regex: new RegExp(filter, 'i') } },  // Dynamic filter in firstName
+            { lastName: { $regex: new RegExp(filter, 'i') } }    // Dynamic filter in lastName
+            ]
+        });
+        const x=users.map((user)=>{
+             return {
+                firstName:user.firstName,
+                lastName:user.lastName,
+                id:user._id
+             }
+        })
+        res.json({
+            x
+        })  
+    } catch(err) {
+        res.status(500).json({
+            message:err
+        })
+    }
+    
 })
 
 module.exports=router;
