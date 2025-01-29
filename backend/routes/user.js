@@ -3,6 +3,7 @@ const router=express.Router();
 const {User}=require('../db/index.js')
 const zod=require('zod');
 const jwt=require('jsonwebtoken');
+const authMiddleware = require('./middleware.js');
 require('dotenv').config();
 const JWT_SECRET=process.env.JWT_SECRET;
 
@@ -96,7 +97,7 @@ const updateBody=zod.object({
     password:zod.string().optional()
 })
 
-router.put('/',async(req,res)=>{
+router.put('/',authMiddleware,async(req,res)=>{
     const {success}=updateBody.safeParse(req.body);
     if(!success) {
         res.status(411).json({
@@ -105,6 +106,22 @@ router.put('/',async(req,res)=>{
         return;
     } 
     await User.updateOne({ _id: req.userId }, req.body);
+})
+
+router.get('/bulk',async(req,res)=>{
+    const filter=req.query.filter||'';
+    const users=await User.find({
+        $or: [
+          { firstName: { $regex: new RegExp(filter, 'i') } },  // Dynamic filter in firstName
+          { lastName: { $regex: new RegExp(filter, 'i') } }    // Dynamic filter in lastName
+        ]
+    });
+    const x=users.map((user)=>{
+        return user;
+    })
+    res.json({
+        x
+    })  
 })
 
 module.exports=router;
