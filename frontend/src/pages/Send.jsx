@@ -1,10 +1,10 @@
 import {useState} from 'react';
 
-function Signup() {
+function Send() {
     return (
         <>
-
+        
         </>
     )
 }
-export default Signup;
+export default Send;

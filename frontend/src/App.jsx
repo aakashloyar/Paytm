@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Send from './assets/Send'
-import Dashboard from './assets/Dashboard'
-import Signin from './assets/Signin'
-import Signup from './assets/Signup'
+import Signup from './pages/Signup'
+import Signin from './pages/Signin'
+import Send from './pages/Send'
+import Dashboard from './pages/Dashboard'
 
 function App() {
 
