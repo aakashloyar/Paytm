@@ -6,7 +6,7 @@ function BottomWarning({label,buttonText,to}) {
             <div className='text-sm flex justify-center py-2 '>
                 {label}
 
-                <Link to={to} className='pointer underline cursor-pointer pl-2'>
+                <Link to={to} className='pointer underline  pl-2'>
                    {buttonText}
                 </Link>
             </div>

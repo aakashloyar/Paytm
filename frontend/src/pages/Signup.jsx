@@ -65,10 +65,7 @@ function Signup() {
                       }
                       
                    }}/>
-
-
                    <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
-
                 </div>
             </div>
 
