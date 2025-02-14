@@ -5,7 +5,7 @@ import Signup from './pages/Signup'
 import Signin from './pages/Signin'
 import Send from './pages/Send'
 import Dashboard from './pages/Dashboard'
-
+import Appbar from './components/Appbar'
 function App() {
 
   return (
@@ -16,7 +16,7 @@ function App() {
         <Route path="signup" element={<Signup />} />
         <Route path="signin" element={<Signin />} />
         <Route path="send" element={<Send />} />
-        
+
       </Routes>
     </BrowserRouter>
     </>
