@@ -4,15 +4,15 @@ const {User,Account}=require('../db/index.js')
 const zod=require('zod');
 const jwt=require('jsonwebtoken');
 const authMiddleware = require('./middleware.js');
+const mongoose=require('mongoose');
 require('dotenv').config();
 const JWT_SECRET=process.env.JWT_SECRET;
 
-router.get('\balance',authMiddleware,(req,res)=>{
+router.get('/balance',authMiddleware,async (req,res)=>{
     try{
-        const account=Account.findOne({
+        const account=await Account.findOne({
             userId:req.userId
         })
-    
         res.status(200).json({
             balance:account.balance
         })
@@ -23,10 +23,9 @@ router.get('\balance',authMiddleware,(req,res)=>{
     }
     
 })
-router.get('/transfer',authMiddleware,async(req,res)=>{
+router.post('/transfer',authMiddleware,async(req,res)=>{
+    const session = await mongoose.startSession();
     try{
-        const session = await mongoose.startSession();
-
         session.startTransaction();
         const { amount, to } = req.body;
     
